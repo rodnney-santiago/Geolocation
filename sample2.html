@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Geolocation Sample 1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<button id="btn">Get Position</button>
+<section>
+    <div id="info"></div>
+</section>
+</body>
+<script>
+    var btn = document.getElementById('btn');
+    var info = document.getElementById('info');
+
+    btn.onclick = function (){
+        if(navigator.geolocation){
+            var geoOptions={
+                enableHighAccuracy: true,
+                timeout: 45000
+            };
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, geoOptions)
+        }
+        else{
+            info.innerHTML = 'Geolocation is not available.';
+        }
+    }
+
+    function onSuccess(position){
+        var msg = '<p>Longitude: ' + position.coords.longitude + '</p>'
+        msg += '<p>Latitude: ' + position.coords.latitude + '</p>'
+        info.innerHTML = msg;
+    }
+
+    function onError(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                info.innerHTML = "User denied the request for Geolocation."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                info.innerHTML = "Location information is unavailable."
+                break;
+            case error.TIMEOUT:
+                info.innerHTML = "The request to get user location timed out."
+                break;
+            case error.UNKNOWN_ERROR:
+                info.innerHTML = "An unknown error occurred."
+                break;
+        }
+    }
+</script>
+</html>

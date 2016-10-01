@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Geolocation Sample 3</title>
+</head>
+<body>
+<button id="start">Start</button>
+<button id="stop">Stop</button>
+<section id="position">
+</section>
+</body>
+<script>
+    var start = document.getElementById('start');
+    var stop = document.getElementById('stop');
+    var geo = navigator.geolocation;
+    var info = document.getElementById('position');
+    var watcher;
+
+    start.onclick = function(){
+        if(geo){
+            watcher = geo.watchPosition(success, failure, {enableHighAccuracy: true, timeout: 45000});
+        }
+        else{
+            info.innerHTML = 'Geolocation not available';
+        }
+    };
+
+    var success = function(position){
+        info.innerHTML += '<p>' + position.coords.latitude + '/' + position.coords.longitude + '</p>';
+    }
+
+    var failure = function (error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                info.innerHTML = "User denied the request for Geolocation."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                info.innerHTML = "Location information is unavailable."
+                break;
+            case error.TIMEOUT:
+                info.innerHTML = "The request to get user location timed out."
+                break;
+            case error.UNKNOWN_ERROR:
+                info.innerHTML = "An unknown error occurred."
+                break;
+        }
+        geo.clearWatch(watcher);
+    }
+
+    stop.onclick = function(){
+        geo.clearWatch(watcher);
+    }
+</script>
+</html>
